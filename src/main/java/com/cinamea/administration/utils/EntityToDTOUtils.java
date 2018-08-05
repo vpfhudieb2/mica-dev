@@ -26,7 +26,7 @@ public class EntityToDTOUtils {
         CinemaBrandDTO cinemaBrandDTO = new CinemaBrandDTO();
         cinemaBrandDTO.setId(cinemaBrandEntity.getId());
         cinemaBrandDTO.setBrandName(cinemaBrandEntity.getName());
-        cinemaBrandDTO.setCinemaCountryDTOs(getCinemaCountryDTOFrom(cinemaBrandEntity.getCinemaCountryEntities()));
+        //cinemaBrandDTO.setCinemaCountryDTOs(getCinemaCountryDTOFrom(cinemaBrandEntity.getCinemaCountryEntities()));
         
         return cinemaBrandDTO;
     }

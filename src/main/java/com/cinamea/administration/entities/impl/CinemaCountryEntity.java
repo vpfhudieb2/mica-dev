@@ -7,6 +7,7 @@ package com.cinamea.administration.entities.impl;
 
 import com.cinamea.administration.entities.AbstractEntity;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -27,13 +29,14 @@ import javax.persistence.Table;
 public class CinemaCountryEntity extends AbstractEntity{
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cinema_countries_seq")
+    @SequenceGenerator(name = "cinema_countries_seq", sequenceName = "cinema_countries_seq", allocationSize = 1)
     private Long id;
     
     @Column(name = "country_code", nullable = false)
     private String countryCode;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cinema_brand_id", nullable = false)
     private CinemaBrandEntity cinemaBrandEntity;
 

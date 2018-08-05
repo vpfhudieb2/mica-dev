@@ -6,7 +6,9 @@
 package com.cinamea.administration.services;
 
 import com.cinamea.administration.dtos.impl.CinemaBrandDTO;
-import com.cinamea.administration.exceptions.NotFoundException;
+import com.cinamea.administration.entities.impl.CinemaBrandEntity;
+import com.cinamea.administration.exceptions.impl.AlreadyExistsException;
+import com.cinamea.administration.exceptions.impl.NotFoundException;
 import java.util.List;
 
 /**
@@ -15,13 +17,15 @@ import java.util.List;
  */
 public interface CinemaBrandManagementService {
     
-    CinemaBrandDTO saveCinemaBrand(CinemaBrandDTO cinemaBrandDTO);
+    CinemaBrandEntity saveCinemaBrand(CinemaBrandDTO cinemaBrandDTO) throws AlreadyExistsException;
     
-    void deleteCinemaBrand(Long brandId);
+    void deleteCinemaBrand(Long brandId) throws NotFoundException;
     
-    List<CinemaBrandDTO> getCinemaBrands();
+    List<CinemaBrandEntity> getCinemaBrands();
     
-    CinemaBrandDTO getCinemaBrand(String name);
+    CinemaBrandEntity getCinemaBrand(String name);
 
-    CinemaBrandDTO getCinemaBrand(Long id) throws NotFoundException;        
+    CinemaBrandEntity getCinemaBrand(Long id) throws NotFoundException;
+    
+    void updateCinemaBrand(CinemaBrandDTO cinemaBrandDTO) throws NotFoundException;
 }

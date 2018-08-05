@@ -16,6 +16,12 @@ public class ServiceError {
     private String fieldName;
     
     private String internationalizedErrorMessage;
+
+    public ServiceError(ServiceErrorType errorType, String fieldName, String internationalizedErrorMessage) {
+        this.errorType = errorType;
+        this.fieldName = fieldName;
+        this.internationalizedErrorMessage = internationalizedErrorMessage;
+    }
     
     public ServiceErrorType getErrorType() {
         return errorType;

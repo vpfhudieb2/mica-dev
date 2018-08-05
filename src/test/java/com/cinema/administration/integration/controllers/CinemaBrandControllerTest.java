@@ -3,18 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cinamea.administration.controllers;
+package com.cinema.administration.integration.controllers;
 
-import com.cinamea.administration.AbstractControllerApplicationContext;
+import com.cinema.administration.integration.AbstractControllerApplicationContext;
 import com.cinamea.administration.dtos.impl.CinemaBrandDTO;
-import com.cinamea.administration.services.CinemaBrandManagementService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -36,21 +31,15 @@ public class CinemaBrandControllerTest extends AbstractControllerApplicationCont
     
     @Test
     public void testCreateNew() throws Exception{
-        CinemaBrandDTO cinemaBrandDTO = new CinemaBrandDTO();
-        cinemaBrandDTO.setBrandName("Mimi");
-        
-        CinemaBrandDTO savedCinemaBrandDTO = new CinemaBrandDTO();
-        savedCinemaBrandDTO.setBrandName("Mimi");
-        savedCinemaBrandDTO.setId(12L);
-        
+
         given(cinemaBrandManagementService.saveCinemaBrand(any(CinemaBrandDTO.class)))
-                .willReturn(savedCinemaBrandDTO);
+                .willReturn(cinemaXBrandEntity);
         
         this.mockMvc
                 .perform(
                             post("/cinemaBrands/new")
                            .contentType(MediaType.APPLICATION_JSON)
-                           .content(objectMapper.writeValueAsBytes(cinemaBrandDTO))
+                           .content(objectMapper.writeValueAsBytes(cinemaXBrandDTO))
                            .characterEncoding("utf8")
                            .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())

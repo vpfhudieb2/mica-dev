@@ -11,6 +11,18 @@ package com.cinamea.administration.dtos.impl.errors;
  */
 public enum ServiceErrorType {
     
-    VALIDATION;
+    VALIDATION(""),
+    NOT_FOUND("exception.not_found"),
+    ALREADY_EXISTS("exception.already_exists");
+    
+    
+    private final String messageCode;
+    
+    private ServiceErrorType(String messageCode){
+        this.messageCode = messageCode;
+    }
 
+    public String getMessageCode() {
+        return messageCode;
+    }
 }

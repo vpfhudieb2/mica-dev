@@ -7,7 +7,7 @@ package com.cinamea.administration.controllers.advices;
 
 import com.cinamea.administration.controllers.validators.AnnotationValidator;
 import com.cinamea.administration.dtos.impl.errors.ServiceErrors;
-import com.cinamea.administration.exceptions.ValidationException;
+import com.cinamea.administration.exceptions.impl.ValidationException;
 import com.cinamea.administration.utils.ResponseMappingUtil;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,21 +28,8 @@ public class ControllersAspectConfig {
     @Autowired
     private AnnotationValidator annotationValidator;
     
-    @Autowired
-    private MessageSource messageSource;
-    
     @InitBinder
     public void validationConfig(WebDataBinder webDataBinder){
         webDataBinder.addValidators(annotationValidator);
-    }
-    
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ServiceErrors> handleValidationExceptions(
-            ValidationException validationException,
-            Locale locale){
-        
-        return ResponseEntity
-                .badRequest()
-                .body(ResponseMappingUtil.createValidationErrorsFromBindingResult(validationException.getBindingResult(), messageSource, locale));
     }
 }

@@ -36,4 +36,5 @@ public abstract class AbstractEntity implements Serializable{
     }
     
     protected abstract Object getId();
+    
 }

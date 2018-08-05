@@ -6,7 +6,6 @@
 package com.cinamea.administration.utils;
 
 import java.net.URI;
-import java.util.Map;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 
 /**

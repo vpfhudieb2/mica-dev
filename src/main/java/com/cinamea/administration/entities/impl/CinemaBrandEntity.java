@@ -6,8 +6,9 @@
 package com.cinamea.administration.entities.impl;
 
 import com.cinamea.administration.entities.AbstractEntity;
+import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -36,7 +37,7 @@ public class CinemaBrandEntity extends AbstractEntity{
     private String name;
     
     @Column(name = "created_at", nullable = false)
-    private OffsetDateTime createdAt;
+    private Instant createdAt;
 
     @OneToMany(mappedBy = "cinemaBrandEntity", cascade = CascadeType.ALL)
     private List<CinemaCountryEntity> cinemaCountryEntities;
@@ -59,6 +60,11 @@ public class CinemaBrandEntity extends AbstractEntity{
     }
 
     public List<CinemaCountryEntity> getCinemaCountryEntities() {
+        
+        if(cinemaCountryEntities == null){
+            cinemaCountryEntities = new ArrayList<>();
+        }
+        
         return cinemaCountryEntities;
     }
 
@@ -66,11 +72,11 @@ public class CinemaBrandEntity extends AbstractEntity{
         this.cinemaCountryEntities = cinemaCountryEntities;
     }
 
-    public OffsetDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(OffsetDateTime createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 }

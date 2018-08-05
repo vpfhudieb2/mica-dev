@@ -7,14 +7,13 @@ package com.cinamea.administration.services.impl;
 
 import com.cinamea.administration.dtos.impl.CinemaBrandDTO;
 import com.cinamea.administration.entities.impl.CinemaBrandEntity;
-import com.cinamea.administration.exceptions.NotFoundException;
+import com.cinamea.administration.exceptions.impl.AlreadyExistsException;
+import com.cinamea.administration.exceptions.impl.NotFoundException;
 import com.cinamea.administration.repositories.CinemaBrandRepository;
 import com.cinamea.administration.services.CinemaBrandManagementService;
-import com.cinamea.administration.utils.EntityToDTOUtils;
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,47 +28,59 @@ public class CinemaBrandManagementServiceImpl implements CinemaBrandManagementSe
     private CinemaBrandRepository cinemaBrandRepository;
     
     @Override
-    public List<CinemaBrandDTO> getCinemaBrands() {
+    public List<CinemaBrandEntity> getCinemaBrands() {
         List<CinemaBrandEntity> result = new ArrayList<>();
         
         cinemaBrandRepository
                 .findAll()
                 .forEach(cinemaBrandEntity -> result.add(cinemaBrandEntity));
         
-        return EntityToDTOUtils.getCinemaBrandDTOFrom(result);
+        return result;
     }
 
     @Override
-    public CinemaBrandDTO getCinemaBrand(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public CinemaBrandEntity getCinemaBrand(String name) {
+        return cinemaBrandRepository.getByNameIgnoreCase(name);
     }
 
     @Override
-    public CinemaBrandDTO getCinemaBrand(Long id) throws NotFoundException{
+    public CinemaBrandEntity getCinemaBrand(Long id) throws NotFoundException{
         
-        return EntityToDTOUtils.getCinemaBrandDTOFrom(
-                cinemaBrandRepository
+        return cinemaBrandRepository
                         .findById(id)
-                        .orElseThrow(() -> new NotFoundException()));
+                        .orElseThrow(() -> new NotFoundException("CinemaBrand", id+""));
     }
 
     @Override
-    public CinemaBrandDTO saveCinemaBrand(CinemaBrandDTO cinemaBrandDTO) {
+    public CinemaBrandEntity saveCinemaBrand(CinemaBrandDTO cinemaBrandDTO) throws AlreadyExistsException{
 
+        if(getCinemaBrand(cinemaBrandDTO.getBrandName()) != null)
+            throw new AlreadyExistsException("CinemaBrand", "name", cinemaBrandDTO.getBrandName());
+        
         CinemaBrandEntity cinemaBrandEntity = new CinemaBrandEntity();
         cinemaBrandEntity.setName(cinemaBrandDTO.getBrandName());
-        cinemaBrandEntity.setCreatedAt(OffsetDateTime.now());
+        cinemaBrandEntity.setCreatedAt(Instant.now());
         
         cinemaBrandEntity = cinemaBrandRepository.save(cinemaBrandEntity);
         
-        return EntityToDTOUtils.getCinemaBrandDTOFrom(cinemaBrandEntity);
+        //return EntityToDTOUtils.getCinemaBrandDTOFrom(cinemaBrandEntity);
+        return cinemaBrandEntity;
     }
 
     @Override
-    public void deleteCinemaBrand(Long brandId) {
-        Optional<CinemaBrandEntity> optional = cinemaBrandRepository.findById(brandId);
-        
-        if(optional.isPresent())
-            cinemaBrandRepository.delete(optional.get());
+    public void updateCinemaBrand(CinemaBrandDTO cinemaBrandDTO) throws NotFoundException{
+
+        CinemaBrandEntity cinemaBrandEntity = cinemaBrandRepository.
+                findById(cinemaBrandDTO.getId()).orElseThrow( () -> new NotFoundException("CinemaBrand", cinemaBrandDTO.getId()+""));
+
+        cinemaBrandEntity.setName(cinemaBrandDTO.getBrandName());
+
+        cinemaBrandRepository.save(cinemaBrandEntity);
+    }
+
+    @Override
+    public void deleteCinemaBrand(Long brandId) throws NotFoundException{
+        CinemaBrandEntity cinemaBrandEntity = getCinemaBrand(brandId);
+        cinemaBrandRepository.delete(cinemaBrandEntity);
     }
 }
